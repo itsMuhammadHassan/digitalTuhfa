@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useMemo, useState } from 'react';
+import React, { createContext, useContext, useEffect, useMemo, useState } from 'react';
 
 export type CardDesign = {
   id: string;
@@ -28,6 +28,13 @@ type AppState = {
   toggleFavourite: (postId: string) => void;
   themeMode: 'light' | 'dark';
   setThemeMode: (mode: 'light' | 'dark') => void;
+  // Auth
+  user: { id: string; name: string; email?: string } | null;
+  isBooting: boolean;
+  signIn: (email: string, password: string) => Promise<void>;
+  signUp: (name: string, email: string, password: string) => Promise<void>;
+  signInWithGoogle: () => Promise<void>;
+  signOut: () => void;
 };
 
 const defaultCard: CardDesign = {
@@ -47,6 +54,13 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   const [currentCardState, setCurrentCardState] = useState<CardDesign>(defaultCard);
   const [moments, setMoments] = useState<MomentPost[]>([]);
   const [themeMode, setThemeMode] = useState<'light' | 'dark'>('light');
+  const [user, setUser] = useState<{ id: string; name: string; email?: string } | null>(null);
+  const [isBooting, setIsBooting] = useState<boolean>(true);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setIsBooting(false), 1200);
+    return () => clearTimeout(timer);
+  }, []);
 
   const setCurrentCard = (partial: Partial<CardDesign>) => {
     setCurrentCardState(prev => ({ ...prev, ...partial }));
@@ -75,7 +89,22 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     toggleFavourite,
     themeMode,
     setThemeMode,
-  }), [currentCardState, moments, themeMode]);
+    user,
+    isBooting,
+    signIn: async (email: string, _password: string) => {
+      await new Promise<void>(resolve => setTimeout(resolve, 500));
+      setUser({ id: 'u1', name: 'Digital Tuhfa User', email });
+    },
+    signUp: async (name: string, email: string, _password: string) => {
+      await new Promise<void>(resolve => setTimeout(resolve, 700));
+      setUser({ id: 'u1', name: name || 'New User', email });
+    },
+    signInWithGoogle: async () => {
+      await new Promise<void>(resolve => setTimeout(resolve, 400));
+      setUser({ id: 'u_google', name: 'Google User' });
+    },
+    signOut: () => setUser(null),
+  }), [currentCardState, moments, themeMode, user, isBooting]);
 
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;
 };

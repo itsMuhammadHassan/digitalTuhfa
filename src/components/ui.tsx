@@ -1,6 +1,7 @@
 import React from 'react';
-import { TouchableOpacity, Text, View, StyleSheet, GestureResponderEvent, ViewStyle, TextStyle } from 'react-native';
+import { TouchableOpacity, Text, View, StyleSheet, GestureResponderEvent, ViewStyle, TextStyle, StyleProp } from 'react-native';
 import { festiveTheme } from '../theme';
+import { fontScale, moderateScale } from '../utils/scale';
 
 type ButtonProps = {
   label: string;
@@ -18,7 +19,7 @@ export const Button: React.FC<ButtonProps> = ({ label, onPress, variant = 'prima
   );
 };
 
-export const Card: React.FC<{ style?: ViewStyle; children: React.ReactNode }> = ({ style, children }) => {
+export const Card: React.FC<{ style?: StyleProp<ViewStyle>; children: React.ReactNode }> = ({ style, children }) => {
   return <View style={[styles.card, style]}>{children}</View>;
 };
 
@@ -28,8 +29,8 @@ export const SectionTitle: React.FC<{ children: React.ReactNode }> = ({ children
 
 const styles = StyleSheet.create({
   button: {
-    paddingVertical: 12,
-    paddingHorizontal: 16,
+    paddingVertical: moderateScale(12),
+    paddingHorizontal: moderateScale(16),
     borderRadius: festiveTheme.radius.pill,
     alignItems: 'center',
     justifyContent: 'center',
@@ -49,6 +50,7 @@ const styles = StyleSheet.create({
   buttonText: {
     color: 'white',
     fontWeight: '600',
+    fontSize: fontScale(14),
   },
   textPrimary: {
     color: festiveTheme.colors.primary,
@@ -61,7 +63,7 @@ const styles = StyleSheet.create({
     ...festiveTheme.shadow.card,
   },
   sectionTitle: {
-    fontSize: 18,
+    fontSize: fontScale(18),
     fontWeight: '700',
     color: festiveTheme.colors.textPrimary,
     marginVertical: 8,

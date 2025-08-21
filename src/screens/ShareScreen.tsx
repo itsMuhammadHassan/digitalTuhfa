@@ -1,11 +1,14 @@
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { Button, Card, SectionTitle } from '../components/ui';
 import { useApp } from '../context/AppContext';
 import { RouteName } from '../navigation/Navigator';
+import { useRequireAuth } from '../hooks/useRequireAuth';
 
 export const ShareScreen: React.FC<{ navigate: (name: RouteName, params?: any) => void; goBack: () => void }> = ({ navigate, goBack }) => {
   const { currentCard, addMoment } = useApp();
+  useRequireAuth(navigate);
 
   const share = (channel: string) => {
     // Dummy action: In real app, integrate share APIs
@@ -13,7 +16,7 @@ export const ShareScreen: React.FC<{ navigate: (name: RouteName, params?: any) =
   };
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <SectionTitle>Share</SectionTitle>
       <Card>
         <Text>Choose where to share your card</Text>
@@ -33,7 +36,7 @@ export const ShareScreen: React.FC<{ navigate: (name: RouteName, params?: any) =
         <Button label="Back" variant="ghost" onPress={goBack} />
         <Button label="Schedule Send" onPress={() => navigate('Schedule')} />
       </View>
-    </View>
+    </SafeAreaView>
   );
 };
 

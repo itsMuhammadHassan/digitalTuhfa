@@ -1,14 +1,18 @@
 import React from 'react';
 import { FlatList, StyleSheet, Text, View } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { useApp } from '../context/AppContext';
 import { Button, Card, SectionTitle } from '../components/ui';
 import { RouteName } from '../navigation/Navigator';
+import { BottomTabs } from '../components/BottomTabs';
+import { useRequireAuth } from '../hooks/useRequireAuth';
 
 export const MomentsScreen: React.FC<{ navigate: (name: RouteName, params?: any) => void; goBack: () => void }> = ({ navigate, goBack }) => {
   const { moments, toggleFavourite } = useApp();
+  useRequireAuth(navigate);
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <SectionTitle>Moments</SectionTitle>
       <FlatList
         data={moments}
@@ -30,11 +34,11 @@ export const MomentsScreen: React.FC<{ navigate: (name: RouteName, params?: any)
         <View style={{ width: 12 }} />
         <Button label="Create New" onPress={() => navigate('Customize')} />
       </View>
-    </View>
+      <BottomTabs current={'Moments'} onNavigate={(n) => navigate(n)} />
+    </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
   container: { flex: 1, padding: 16 },
 });
-

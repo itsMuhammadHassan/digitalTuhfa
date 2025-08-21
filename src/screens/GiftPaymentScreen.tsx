@@ -1,14 +1,17 @@
 import React, { useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { Button, Card, SectionTitle } from '../components/ui';
 import { RouteName } from '../navigation/Navigator';
 import { useApp } from '../context/AppContext';
+import { useRequireAuth } from '../hooks/useRequireAuth';
 
 const gifts = ['Chocolate Box', 'Flowers', 'Coffee Voucher', 'Book Coupon'];
 const methods = ['JazzCash', 'Easypaisa', 'Credit/Debit Card'];
 
 export const GiftPaymentScreen: React.FC<{ navigate: (name: RouteName, params?: any) => void; goBack: () => void }> = ({ navigate, goBack }) => {
   const { currentCard, setCurrentCard } = useApp();
+  useRequireAuth(navigate);
   const [selectedGifts, setSelectedGifts] = useState<string[]>(currentCard.gifts);
   const [selectedMethod, setSelectedMethod] = useState<string | null>(null);
 
@@ -17,7 +20,7 @@ export const GiftPaymentScreen: React.FC<{ navigate: (name: RouteName, params?: 
   };
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <SectionTitle>Attach Gifts</SectionTitle>
       <Card>
         <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 8 }}>
@@ -45,7 +48,7 @@ export const GiftPaymentScreen: React.FC<{ navigate: (name: RouteName, params?: 
           }}
         />
       </View>
-    </View>
+    </SafeAreaView>
   );
 };
 

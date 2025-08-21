@@ -1,15 +1,18 @@
 import React, { useState } from 'react';
 import { StyleSheet, Text, TextInput, View } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { Button, Card, SectionTitle } from '../components/ui';
 import { useApp } from '../context/AppContext';
+import { useRequireAuth } from '../hooks/useRequireAuth';
 import { RouteName } from '../navigation/Navigator';
 
 export const ScheduleScreen: React.FC<{ navigate: (name: RouteName, params?: any) => void; goBack: () => void }> = ({ navigate, goBack }) => {
   const { currentCard, setCurrentCard } = useApp();
+  useRequireAuth(navigate);
   const [dateTime, setDateTime] = useState<string>(currentCard.scheduledAt ?? '');
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <SectionTitle>Schedule Send</SectionTitle>
       <Card>
         <Text>Enter date and time (ISO or any note for dummy UI)</Text>
@@ -25,7 +28,7 @@ export const ScheduleScreen: React.FC<{ navigate: (name: RouteName, params?: any
           <Button label="Save" onPress={() => { setCurrentCard({ scheduledAt: dateTime }); navigate('Share'); }} />
         </View>
       </Card>
-    </View>
+    </SafeAreaView>
   );
 };
 
