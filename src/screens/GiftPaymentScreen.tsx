@@ -2,16 +2,15 @@ import React, { useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Button, Card, SectionTitle } from '../components/ui';
-import { RouteName } from '../navigation/Navigator';
 import { useApp } from '../context/AppContext';
 import { useRequireAuth } from '../hooks/useRequireAuth';
 
 const gifts = ['Chocolate Box', 'Flowers', 'Coffee Voucher', 'Book Coupon'];
 const methods = ['JazzCash', 'Easypaisa', 'Credit/Debit Card'];
 
-export const GiftPaymentScreen: React.FC<{ navigate: (name: RouteName, params?: any) => void; goBack: () => void }> = ({ navigate, goBack }) => {
+export const GiftPaymentScreen: React.FC<any> = ({ navigation }) => {
   const { currentCard, setCurrentCard } = useApp();
-  useRequireAuth(navigate);
+  useRequireAuth((name) => navigation.navigate(name as any));
   const [selectedGifts, setSelectedGifts] = useState<string[]>(currentCard.gifts);
   const [selectedMethod, setSelectedMethod] = useState<string | null>(null);
 
@@ -38,13 +37,13 @@ export const GiftPaymentScreen: React.FC<{ navigate: (name: RouteName, params?: 
       </Card>
 
       <View style={{ flexDirection: 'row' }}>
-        <Button label="Back" variant="ghost" onPress={goBack} />
+        <Button label="Back" variant="ghost" onPress={() => navigation.goBack()} />
         <View style={{ width: 12 }} />
         <Button
           label="Confirm Payment"
           onPress={() => {
             setCurrentCard({ gifts: selectedGifts, isPaid: true });
-            navigate('Share');
+            navigation.navigate('Share');
           }}
         />
       </View>

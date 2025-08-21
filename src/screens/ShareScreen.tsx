@@ -3,12 +3,11 @@ import { StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Button, Card, SectionTitle } from '../components/ui';
 import { useApp } from '../context/AppContext';
-import { RouteName } from '../navigation/Navigator';
 import { useRequireAuth } from '../hooks/useRequireAuth';
 
-export const ShareScreen: React.FC<{ navigate: (name: RouteName, params?: any) => void; goBack: () => void }> = ({ navigate, goBack }) => {
+export const ShareScreen: React.FC<any> = ({ navigation }) => {
   const { currentCard, addMoment } = useApp();
-  useRequireAuth(navigate);
+  useRequireAuth((name) => navigation.navigate(name as any));
 
   const share = (channel: string) => {
     // Dummy action: In real app, integrate share APIs
@@ -29,12 +28,12 @@ export const ShareScreen: React.FC<{ navigate: (name: RouteName, params?: any) =
 
       <Card>
         <Text>Or share to Moments feed</Text>
-        <Button label="Post to Moments" onPress={() => { addMoment(currentCard); navigate('Moments'); }} />
+        <Button label="Post to Moments" onPress={() => { addMoment(currentCard); navigation.navigate('Moments'); }} />
       </Card>
 
       <View style={styles.row}>
-        <Button label="Back" variant="ghost" onPress={goBack} />
-        <Button label="Schedule Send" onPress={() => navigate('Schedule')} />
+        <Button label="Back" variant="ghost" onPress={() => navigation.goBack()} />
+        <Button label="Schedule Send" onPress={() => navigation.navigate('Schedule')} />
       </View>
     </SafeAreaView>
   );

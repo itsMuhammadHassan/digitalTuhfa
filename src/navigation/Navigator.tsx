@@ -1,6 +1,18 @@
-import React, { useMemo, useState } from 'react';
-import { View, StyleSheet } from 'react-native';
+import React from 'react';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { NavigationContainer, DefaultTheme, Theme } from '@react-navigation/native';
 import { festiveTheme } from '../theme';
+import { HomeScreen } from '../screens/HomeScreen';
+import { CustomizeScreen } from '../screens/CustomizeScreen';
+import { MomentsScreen } from '../screens/MomentsScreen';
+import { ProfileScreen } from '../screens/ProfileScreen';
+import { GiftPaymentScreen } from '../screens/GiftPaymentScreen';
+import { ShareScreen } from '../screens/ShareScreen';
+import { SplashScreen } from '../screens/auth/SplashScreen';
+import { LoginScreen } from '../screens/auth/LoginScreen';
+import { SignupScreen } from '../screens/auth/SignupScreen';
+import { ScheduleScreen } from '../screens/ScheduleScreen';
 
 export type RouteName =
   | 'Splash'
@@ -14,37 +26,60 @@ export type RouteName =
   | 'Profile'
   | 'Schedule';
 
-export type Route = { name: RouteName; params?: Record<string, unknown> };
+const Tab = createBottomTabNavigator();
+const Stack = createNativeStackNavigator();
 
-type NavigatorProps = {
-  initialRoute: RouteName;
-  screens: Record<RouteName, React.ComponentType<{ navigate: (name: RouteName, params?: Record<string, unknown>) => void; goBack: () => void; route: Route }>>;
+const navigationTheme: Theme = {
+  ...DefaultTheme,
+  colors: {
+    ...DefaultTheme.colors,
+    background: festiveTheme.colors.background,
+    card: festiveTheme.colors.surface,
+    primary: festiveTheme.colors.primary,
+    text: festiveTheme.colors.textPrimary,
+    border: festiveTheme.colors.muted,
+  },
 };
 
-export const Navigator: React.FC<NavigatorProps> = ({ initialRoute, screens }) => {
-  const [stack, setStack] = useState<Route[]>([{ name: initialRoute }]);
+const Tabs = () => (
+  <Tab.Navigator
+    screenOptions={{
+      headerShown: false,
+      tabBarStyle: {
+        position: 'absolute',
+        left: 0,
+        right: 0,
+        bottom: 0,
+        borderTopLeftRadius: 24,
+        borderTopRightRadius: 24,
+        height: 64,
+        backgroundColor: '#FFFFFF',
+        elevation: 8,
+      },
+      tabBarActiveTintColor: festiveTheme.colors.primary,
+      tabBarInactiveTintColor: '#7A7A7A',
+      tabBarLabelStyle: { fontWeight: '600' },
+    }}
+  >
+    <Tab.Screen name="Home" component={HomeScreen as any} />
+    <Tab.Screen name="Customize" component={CustomizeScreen as any} options={{ title: 'Create' }} />
+    <Tab.Screen name="Moments" component={MomentsScreen as any} />
+    <Tab.Screen name="Profile" component={ProfileScreen as any} />
+  </Tab.Navigator>
+);
 
-  const navigate = (name: RouteName, params?: Record<string, unknown>) => {
-    setStack(prev => [...prev, { name, params }]);
-  };
-
-  const goBack = () => {
-    setStack(prev => prev.length > 1 ? prev.slice(0, -1) : prev);
-  };
-
-  const Current = useMemo(() => screens[stack[stack.length - 1].name], [stack, screens]);
-  const route = stack[stack.length - 1];
-
+export const Navigator = () => {
   return (
-    <View style={styles.container}>
-      <Current navigate={navigate} goBack={goBack} route={route} />
-    </View>
+    <NavigationContainer theme={navigationTheme}>
+      <Stack.Navigator screenOptions={{ headerShown: false }}>
+        <Stack.Screen name="Splash" component={SplashScreen as any} />
+        <Stack.Screen name="Login" component={LoginScreen as any} />
+        <Stack.Screen name="Signup" component={SignupScreen as any} />
+        <Stack.Screen name="Root" component={Tabs} />
+        <Stack.Screen name="GiftPayment" component={GiftPaymentScreen as any} />
+        <Stack.Screen name="Share" component={ShareScreen as any} />
+        <Stack.Screen name="Schedule" component={ScheduleScreen as any} />
+      </Stack.Navigator>
+    </NavigationContainer>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: festiveTheme.colors.background,
-  },
-});

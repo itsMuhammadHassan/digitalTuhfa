@@ -1,18 +1,17 @@
 import React, { useEffect } from 'react';
 import { Image, StyleSheet, Text, View } from 'react-native';
 import { useApp } from '../../context/AppContext';
-import { RouteName } from '../../navigation/Navigator';
 import { festiveTheme } from '../../theme';
 import { fontScale, moderateScale } from '../../utils/scale';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-export const SplashScreen: React.FC<{ navigate: (name: RouteName) => void }> = ({ navigate }) => {
+export const SplashScreen: React.FC<any> = ({ navigation }) => {
   const { isBooting, user } = useApp();
 
   useEffect(() => {
     if (!isBooting) {
-      if (user) navigate('Home');
-      else navigate('Login');
+      if (user) navigation.replace('Root');
+      else navigation.replace('Login');
     }
   }, [isBooting, user]);
 

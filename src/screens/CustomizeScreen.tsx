@@ -4,8 +4,6 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { useApp } from '../context/AppContext';
 import { Button, Card, SectionTitle } from '../components/ui';
 import { festiveTheme } from '../theme';
-import { RouteName } from '../navigation/Navigator';
-import { BottomTabs } from '../components/BottomTabs';
 import { useRequireAuth } from '../hooks/useRequireAuth';
 
 const suggestedMessagesByCategory: Record<string, string[]> = {
@@ -31,9 +29,9 @@ const suggestedMessagesByCategory: Record<string, string[]> = {
   ],
 };
 
-export const CustomizeScreen: React.FC<{ navigate: (name: RouteName, params?: any) => void; goBack: () => void }> = ({ navigate, goBack }) => {
+export const CustomizeScreen: React.FC<any> = ({ navigation }) => {
   const { currentCard, setCurrentCard } = useApp();
-  useRequireAuth(navigate);
+  useRequireAuth((name) => navigation.navigate(name as any));
   const suggestions = useMemo(() => suggestedMessagesByCategory[currentCard.category] ?? [], [currentCard.category]);
 
   return (
@@ -83,13 +81,12 @@ export const CustomizeScreen: React.FC<{ navigate: (name: RouteName, params?: an
       </Card>
 
       <View style={styles.row}>
-        <Button label="Back" variant="ghost" onPress={goBack} />
+        <Button label="Back" variant="ghost" onPress={() => navigation.goBack()} />
         <View style={{ width: 12 }} />
-        <Button label="Attach Gifts" variant="secondary" onPress={() => navigate('GiftPayment')} />
+        <Button label="Attach Gifts" variant="secondary" onPress={() => navigation.navigate('GiftPayment')} />
         <View style={{ width: 12 }} />
-        <Button label="Share" onPress={() => navigate('Share')} />
+        <Button label="Share" onPress={() => navigation.navigate('Share')} />
       </View>
-      <BottomTabs current={'Customize'} onNavigate={(n) => navigate(n)} />
     </SafeAreaView>
   );
 };
