@@ -5,13 +5,20 @@
  * @format
  */
 
-import { NewAppScreen } from '@react-native/new-app-screen';
-import { StatusBar, StyleSheet, Text, useColorScheme, View } from 'react-native';
+import { StatusBar, StyleSheet, useColorScheme, View } from 'react-native';
 import {
   SafeAreaProvider,
   useSafeAreaInsets,
 } from 'react-native-safe-area-context';
-import Test from './test';
+import { AppProvider } from './src/context/AppContext';
+import { Navigator } from './src/navigation/Navigator';
+import { HomeScreen } from './src/screens/HomeScreen';
+import { CustomizeScreen } from './src/screens/CustomizeScreen';
+import { GiftPaymentScreen } from './src/screens/GiftPaymentScreen';
+import { ShareScreen } from './src/screens/ShareScreen';
+import { MomentsScreen } from './src/screens/MomentsScreen';
+import { ProfileScreen } from './src/screens/ProfileScreen';
+import { ScheduleScreen } from './src/screens/ScheduleScreen';
 
 function App() {
   const isDarkMode = useColorScheme() === 'dark';
@@ -19,7 +26,9 @@ function App() {
   return (
     <SafeAreaProvider>
       <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
-      <AppContent />
+      <AppProvider>
+        <AppContent />
+      </AppProvider>
     </SafeAreaProvider>
   );
 }
@@ -29,7 +38,18 @@ function AppContent() {
 
   return (
     <View style={styles.container}>
-      <Test/>
+      <Navigator
+        initialRoute="Home"
+        screens={{
+          Home: HomeScreen,
+          Customize: CustomizeScreen,
+          GiftPayment: GiftPaymentScreen,
+          Share: ShareScreen,
+          Moments: MomentsScreen,
+          Profile: ProfileScreen,
+          Schedule: ScheduleScreen,
+        }}
+      />
     </View>
   );
 }
