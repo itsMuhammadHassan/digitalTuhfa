@@ -1,9 +1,12 @@
 import React, { useMemo } from 'react';
 import { StyleSheet, Text, TextInput, View, Switch } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { useApp } from '../context/AppContext';
 import { Button, Card, SectionTitle } from '../components/ui';
 import { festiveTheme } from '../theme';
 import { RouteName } from '../navigation/Navigator';
+import { BottomTabs } from '../components/BottomTabs';
+import { useRequireAuth } from '../hooks/useRequireAuth';
 
 const suggestedMessagesByCategory: Record<string, string[]> = {
   Cultural: [
@@ -30,10 +33,11 @@ const suggestedMessagesByCategory: Record<string, string[]> = {
 
 export const CustomizeScreen: React.FC<{ navigate: (name: RouteName, params?: any) => void; goBack: () => void }> = ({ navigate, goBack }) => {
   const { currentCard, setCurrentCard } = useApp();
+  useRequireAuth(navigate);
   const suggestions = useMemo(() => suggestedMessagesByCategory[currentCard.category] ?? [], [currentCard.category]);
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <SectionTitle>Customize</SectionTitle>
       <Card>
         <View style={[styles.preview, { backgroundColor: currentCard.backgroundColor }]}> 
@@ -85,7 +89,8 @@ export const CustomizeScreen: React.FC<{ navigate: (name: RouteName, params?: an
         <View style={{ width: 12 }} />
         <Button label="Share" onPress={() => navigate('Share')} />
       </View>
-    </View>
+      <BottomTabs current={'Customize'} onNavigate={(n) => navigate(n)} />
+    </SafeAreaView>
   );
 };
 

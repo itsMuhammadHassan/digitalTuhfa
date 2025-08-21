@@ -1,9 +1,12 @@
 import React from 'react';
 import { FlatList, Image, StyleSheet, Text, View } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { festiveTheme } from '../theme';
 import { Button, Card, SectionTitle } from '../components/ui';
+import { BottomTabs } from '../components/BottomTabs';
 import { RouteName } from '../navigation/Navigator';
 import { useApp } from '../context/AppContext';
+import { useRequireAuth } from '../hooks/useRequireAuth';
 
 const categories = [
   { key: 'Cultural', color: '#F1C40F' },
@@ -15,9 +18,10 @@ const categories = [
 
 export const HomeScreen: React.FC<{ navigate: (name: RouteName, params?: any) => void; goBack?: () => void; route?: { name: RouteName; params?: any } }> = ({ navigate }) => {
   const { setCurrentCard } = useApp();
+  useRequireAuth(navigate);
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <Text style={styles.title}>Digital Tuhfa</Text>
       <Text style={styles.subtitle}>Send warm, festive digital greeting cards</Text>
       <SectionTitle>Categories</SectionTitle>
@@ -47,7 +51,8 @@ export const HomeScreen: React.FC<{ navigate: (name: RouteName, params?: any) =>
         <View style={{ width: 12 }} />
         <Button label="Profile" variant="ghost" onPress={() => navigate('Profile')} />
       </View>
-    </View>
+      <BottomTabs current={'Home'} onNavigate={(n) => navigate(n)} />
+    </SafeAreaView>
   );
 };
 

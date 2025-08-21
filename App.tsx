@@ -19,6 +19,9 @@ import { ShareScreen } from './src/screens/ShareScreen';
 import { MomentsScreen } from './src/screens/MomentsScreen';
 import { ProfileScreen } from './src/screens/ProfileScreen';
 import { ScheduleScreen } from './src/screens/ScheduleScreen';
+import { SplashScreen } from './src/screens/auth/SplashScreen';
+import { LoginScreen } from './src/screens/auth/LoginScreen';
+import { SignupScreen } from './src/screens/auth/SignupScreen';
 
 function App() {
   const isDarkMode = useColorScheme() === 'dark';
@@ -39,8 +42,11 @@ function AppContent() {
   return (
     <View style={styles.container}>
       <Navigator
-        initialRoute="Home"
+        initialRoute="Splash"
         screens={{
+          Splash: SplashScreen,
+          Login: LoginScreen,
+          Signup: SignupScreen,
           Home: HomeScreen,
           Customize: CustomizeScreen,
           GiftPayment: GiftPaymentScreen,

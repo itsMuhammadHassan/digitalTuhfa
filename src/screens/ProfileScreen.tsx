@@ -1,15 +1,19 @@
 import React, { useMemo } from 'react';
 import { FlatList, StyleSheet, Text, View } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { Button, Card, SectionTitle } from '../components/ui';
 import { useApp } from '../context/AppContext';
 import { RouteName } from '../navigation/Navigator';
+import { BottomTabs } from '../components/BottomTabs';
+import { useRequireAuth } from '../hooks/useRequireAuth';
 
 export const ProfileScreen: React.FC<{ navigate: (name: RouteName, params?: any) => void; goBack: () => void }> = ({ navigate, goBack }) => {
   const { moments } = useApp();
+  useRequireAuth(navigate);
   const favourites = useMemo(() => moments.filter(m => m.isFavourite), [moments]);
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <SectionTitle>Profile</SectionTitle>
       <Card>
         <Text style={{ fontWeight: '700' }}>Your Wall</Text>
@@ -46,7 +50,8 @@ export const ProfileScreen: React.FC<{ navigate: (name: RouteName, params?: any)
         <View style={{ width: 12 }} />
         <Button label="Home" onPress={() => navigate('Home')} />
       </View>
-    </View>
+      <BottomTabs current={'Profile'} onNavigate={(n) => navigate(n)} />
+    </SafeAreaView>
   );
 };
 

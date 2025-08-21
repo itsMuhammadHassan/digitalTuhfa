@@ -3,6 +3,9 @@ import { View, StyleSheet } from 'react-native';
 import { festiveTheme } from '../theme';
 
 export type RouteName =
+  | 'Splash'
+  | 'Login'
+  | 'Signup'
   | 'Home'
   | 'Customize'
   | 'GiftPayment'
