@@ -4,9 +4,8 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { festiveTheme } from '../../theme';
 import { fontScale, moderateScale } from '../../utils/scale';
 import { useApp } from '../../context/AppContext';
-import { RouteName } from '../../navigation/Navigator';
 
-export const LoginScreen: React.FC<{ navigate: (name: RouteName) => void }> = ({ navigate }) => {
+export const LoginScreen: React.FC<any> = ({ navigation }) => {
   const { signIn, signInWithGoogle } = useApp();
   const [email, setEmail] = useState('demo@tuhfa.app');
   const [password, setPassword] = useState('password');
@@ -17,7 +16,7 @@ export const LoginScreen: React.FC<{ navigate: (name: RouteName) => void }> = ({
     setLoading(true);
     await signIn(email, password);
     setLoading(false);
-    navigate('Home');
+    navigation.replace('Root');
   };
 
   const onGoogle = async () => {
@@ -25,7 +24,7 @@ export const LoginScreen: React.FC<{ navigate: (name: RouteName) => void }> = ({
     setLoading(true);
     await signInWithGoogle();
     setLoading(false);
-    navigate('Home');
+    navigation.replace('Root');
   };
 
   return (
@@ -53,7 +52,7 @@ export const LoginScreen: React.FC<{ navigate: (name: RouteName) => void }> = ({
         </TouchableOpacity>
       </View>
 
-      <TouchableOpacity onPress={() => navigate('Signup')}>
+      <TouchableOpacity onPress={() => navigation.navigate('Signup')}>
         <Text style={styles.switchText}>New here? Create account</Text>
       </TouchableOpacity>
     </SafeAreaView>

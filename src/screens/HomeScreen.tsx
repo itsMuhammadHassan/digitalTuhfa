@@ -3,7 +3,6 @@ import { FlatList, Image, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { festiveTheme } from '../theme';
 import { Button, Card, SectionTitle } from '../components/ui';
-import { BottomTabs } from '../components/BottomTabs';
 import { RouteName } from '../navigation/Navigator';
 import { useApp } from '../context/AppContext';
 import { useRequireAuth } from '../hooks/useRequireAuth';
@@ -16,9 +15,9 @@ const categories = [
   { key: 'Well Wishes', color: '#9B59B6' },
 ];
 
-export const HomeScreen: React.FC<{ navigate: (name: RouteName, params?: any) => void; goBack?: () => void; route?: { name: RouteName; params?: any } }> = ({ navigate }) => {
+export const HomeScreen: React.FC<any> = ({ navigation }) => {
   const { setCurrentCard } = useApp();
-  useRequireAuth(navigate);
+  useRequireAuth((name) => navigation.navigate(name as any));
 
   return (
     <SafeAreaView style={styles.container}>
@@ -38,7 +37,7 @@ export const HomeScreen: React.FC<{ navigate: (name: RouteName, params?: any) =>
               label="Create"
               onPress={() => {
                 setCurrentCard({ category: item.key });
-                navigate('Customize');
+                navigation.navigate('Customize');
               }}
             />
           </Card>
@@ -47,11 +46,10 @@ export const HomeScreen: React.FC<{ navigate: (name: RouteName, params?: any) =>
 
       <SectionTitle>Quick Actions</SectionTitle>
       <View style={styles.row}>
-        <Button label="Moments" variant="secondary" onPress={() => navigate('Moments')} />
+        <Button label="Moments" variant="secondary" onPress={() => navigation.navigate('Moments')} />
         <View style={{ width: 12 }} />
-        <Button label="Profile" variant="ghost" onPress={() => navigate('Profile')} />
+        <Button label="Profile" variant="ghost" onPress={() => navigation.navigate('Profile')} />
       </View>
-      <BottomTabs current={'Home'} onNavigate={(n) => navigate(n)} />
     </SafeAreaView>
   );
 };

@@ -4,9 +4,7 @@ import { StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-nativ
 import { festiveTheme } from '../../theme';
 import { fontScale, moderateScale } from '../../utils/scale';
 import { useApp } from '../../context/AppContext';
-import { RouteName } from '../../navigation/Navigator';
-
-export const SignupScreen: React.FC<{ navigate: (name: RouteName) => void; goBack?: () => void }> = ({ navigate }) => {
+export const SignupScreen: React.FC<any> = ({ navigation }) => {
   const { signUp, signInWithGoogle } = useApp();
   const [name, setName] = useState('Demo User');
   const [email, setEmail] = useState('demo@tuhfa.app');
@@ -18,7 +16,7 @@ export const SignupScreen: React.FC<{ navigate: (name: RouteName) => void; goBac
     setLoading(true);
     await signUp(name, email, password);
     setLoading(false);
-    navigate('Home');
+    navigation.replace('Root');
   };
 
   const onGoogle = async () => {
@@ -26,7 +24,7 @@ export const SignupScreen: React.FC<{ navigate: (name: RouteName) => void; goBac
     setLoading(true);
     await signInWithGoogle();
     setLoading(false);
-    navigate('Home');
+    navigation.replace('Root');
   };
 
   return (
@@ -57,7 +55,7 @@ export const SignupScreen: React.FC<{ navigate: (name: RouteName) => void; goBac
         </TouchableOpacity>
       </View>
 
-      <TouchableOpacity onPress={() => navigate('Login')}>
+      <TouchableOpacity onPress={() => navigation.navigate('Login')}>
         <Text style={styles.switchText}>Already have an account? Sign in</Text>
       </TouchableOpacity>
     </SafeAreaView>

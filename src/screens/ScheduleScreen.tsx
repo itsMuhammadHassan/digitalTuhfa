@@ -4,11 +4,9 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { Button, Card, SectionTitle } from '../components/ui';
 import { useApp } from '../context/AppContext';
 import { useRequireAuth } from '../hooks/useRequireAuth';
-import { RouteName } from '../navigation/Navigator';
-
-export const ScheduleScreen: React.FC<{ navigate: (name: RouteName, params?: any) => void; goBack: () => void }> = ({ navigate, goBack }) => {
+export const ScheduleScreen: React.FC<any> = ({ navigation }) => {
   const { currentCard, setCurrentCard } = useApp();
-  useRequireAuth(navigate);
+  useRequireAuth((name) => navigation.navigate(name as any));
   const [dateTime, setDateTime] = useState<string>(currentCard.scheduledAt ?? '');
 
   return (
@@ -23,9 +21,9 @@ export const ScheduleScreen: React.FC<{ navigate: (name: RouteName, params?: any
           style={styles.input}
         />
         <View style={{ flexDirection: 'row' }}>
-          <Button label="Back" variant="ghost" onPress={goBack} />
+          <Button label="Back" variant="ghost" onPress={() => navigation.goBack()} />
           <View style={{ width: 12 }} />
-          <Button label="Save" onPress={() => { setCurrentCard({ scheduledAt: dateTime }); navigate('Share'); }} />
+          <Button label="Save" onPress={() => { setCurrentCard({ scheduledAt: dateTime }); navigation.navigate('Share'); }} />
         </View>
       </Card>
     </SafeAreaView>

@@ -3,13 +3,11 @@ import { FlatList, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Button, Card, SectionTitle } from '../components/ui';
 import { useApp } from '../context/AppContext';
-import { RouteName } from '../navigation/Navigator';
-import { BottomTabs } from '../components/BottomTabs';
 import { useRequireAuth } from '../hooks/useRequireAuth';
 
-export const ProfileScreen: React.FC<{ navigate: (name: RouteName, params?: any) => void; goBack: () => void }> = ({ navigate, goBack }) => {
+export const ProfileScreen: React.FC<any> = ({ navigation }) => {
   const { moments } = useApp();
-  useRequireAuth(navigate);
+  useRequireAuth((name) => navigation.navigate(name as any));
   const favourites = useMemo(() => moments.filter(m => m.isFavourite), [moments]);
 
   return (
@@ -46,11 +44,10 @@ export const ProfileScreen: React.FC<{ navigate: (name: RouteName, params?: any)
       </Card>
 
       <View style={{ flexDirection: 'row' }}>
-        <Button label="Back" variant="ghost" onPress={goBack} />
+        <Button label="Back" variant="ghost" onPress={() => navigation.goBack()} />
         <View style={{ width: 12 }} />
-        <Button label="Home" onPress={() => navigate('Home')} />
+        <Button label="Home" onPress={() => navigation.navigate('Home')} />
       </View>
-      <BottomTabs current={'Profile'} onNavigate={(n) => navigate(n)} />
     </SafeAreaView>
   );
 };

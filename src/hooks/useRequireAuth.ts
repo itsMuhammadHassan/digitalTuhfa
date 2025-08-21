@@ -1,8 +1,6 @@
 import { useEffect } from 'react';
 import { useApp } from '../context/AppContext';
-import { RouteName } from '../navigation/Navigator';
-
-export const useRequireAuth = (navigate: (name: RouteName) => void) => {
+export const useRequireAuth = (navigate: (name: string) => void) => {
   const { user, isBooting } = useApp();
 
   useEffect(() => {
