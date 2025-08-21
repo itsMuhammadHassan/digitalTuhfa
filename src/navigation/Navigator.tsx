@@ -3,6 +3,9 @@ import { View, StyleSheet } from 'react-native';
 import { festiveTheme } from '../theme';
 
 export type RouteName =
+  | 'Splash'
+  | 'Login'
+  | 'Signup'
   | 'Home'
   | 'Customize'
   | 'GiftPayment'
@@ -13,15 +16,23 @@ export type RouteName =
 
 export type Route = { name: RouteName; params?: Record<string, unknown> };
 
+type ScreenComponent = React.ComponentType<{ navigate: (name: RouteName, params?: Record<string, unknown>) => void; goBack: () => void; route: Route }>;
 type NavigatorProps = {
   initialRoute: RouteName;
-  screens: Record<RouteName, React.ComponentType<{ navigate: (name: RouteName, params?: Record<string, unknown>) => void; goBack: () => void; route: Route }>>;
+  screens: Record<RouteName, ScreenComponent>;
+  isAuthenticated?: boolean;
 };
 
-export const Navigator: React.FC<NavigatorProps> = ({ initialRoute, screens }) => {
+export const Navigator: React.FC<NavigatorProps> = ({ initialRoute, screens, isAuthenticated }) => {
   const [stack, setStack] = useState<Route[]>([{ name: initialRoute }]);
 
   const navigate = (name: RouteName, params?: Record<string, unknown>) => {
+    // Gatekeeping: if not authenticated, only allow auth routes
+    const isAuthRoute = name === 'Login' || name === 'Signup' || name === 'Splash';
+    if (!isAuthenticated && !isAuthRoute) {
+      setStack(prev => [...prev, { name: 'Login' }]);
+      return;
+    }
     setStack(prev => [...prev, { name, params }]);
   };
 

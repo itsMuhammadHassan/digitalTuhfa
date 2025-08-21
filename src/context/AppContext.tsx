@@ -28,6 +28,9 @@ type AppState = {
   toggleFavourite: (postId: string) => void;
   themeMode: 'light' | 'dark';
   setThemeMode: (mode: 'light' | 'dark') => void;
+  user: { name: string } | null;
+  login: (name: string) => void;
+  logout: () => void;
 };
 
 const defaultCard: CardDesign = {
@@ -47,6 +50,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   const [currentCardState, setCurrentCardState] = useState<CardDesign>(defaultCard);
   const [moments, setMoments] = useState<MomentPost[]>([]);
   const [themeMode, setThemeMode] = useState<'light' | 'dark'>('light');
+  const [user, setUser] = useState<{ name: string } | null>(null);
 
   const setCurrentCard = (partial: Partial<CardDesign>) => {
     setCurrentCardState(prev => ({ ...prev, ...partial }));
@@ -67,6 +71,9 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     setMoments(prev => prev.map(p => p.id === postId ? { ...p, isFavourite: !p.isFavourite } : p));
   };
 
+  const login = (name: string) => setUser({ name });
+  const logout = () => setUser(null);
+
   const value = useMemo<AppState>(() => ({
     currentCard: currentCardState,
     setCurrentCard,
@@ -75,6 +82,9 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     toggleFavourite,
     themeMode,
     setThemeMode,
+    user,
+    login,
+    logout,
   }), [currentCardState, moments, themeMode]);
 
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;

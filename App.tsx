@@ -10,7 +10,7 @@ import {
   SafeAreaProvider,
   useSafeAreaInsets,
 } from 'react-native-safe-area-context';
-import { AppProvider } from './src/context/AppContext';
+import { AppProvider, useApp } from './src/context/AppContext';
 import { Navigator } from './src/navigation/Navigator';
 import { HomeScreen } from './src/screens/HomeScreen';
 import { CustomizeScreen } from './src/screens/CustomizeScreen';
@@ -19,6 +19,9 @@ import { ShareScreen } from './src/screens/ShareScreen';
 import { MomentsScreen } from './src/screens/MomentsScreen';
 import { ProfileScreen } from './src/screens/ProfileScreen';
 import { ScheduleScreen } from './src/screens/ScheduleScreen';
+import { SplashScreen } from './src/screens/SplashScreen';
+import { LoginScreen } from './src/screens/LoginScreen';
+import { SignupScreen } from './src/screens/SignupScreen';
 
 function App() {
   const isDarkMode = useColorScheme() === 'dark';
@@ -35,19 +38,24 @@ function App() {
 
 function AppContent() {
   const safeAreaInsets = useSafeAreaInsets();
+  const { user } = useApp();
 
   return (
     <View style={styles.container}>
       <Navigator
-        initialRoute="Home"
+        initialRoute="Splash"
+        isAuthenticated={!!user}
         screens={{
-          Home: HomeScreen,
-          Customize: CustomizeScreen,
-          GiftPayment: GiftPaymentScreen,
-          Share: ShareScreen,
-          Moments: MomentsScreen,
-          Profile: ProfileScreen,
-          Schedule: ScheduleScreen,
+          Splash: SplashScreen as any,
+          Login: LoginScreen as any,
+          Signup: SignupScreen as any,
+          Home: HomeScreen as any,
+          Customize: CustomizeScreen as any,
+          GiftPayment: GiftPaymentScreen as any,
+          Share: ShareScreen as any,
+          Moments: MomentsScreen as any,
+          Profile: ProfileScreen as any,
+          Schedule: ScheduleScreen as any,
         }}
       />
     </View>
